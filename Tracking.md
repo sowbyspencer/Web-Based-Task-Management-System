@@ -99,3 +99,4 @@ Task Management System/
 - Added the `tsconfig.json` file.
 - Installed Node.js and TypeScript
 - Project specific files/packages installed.
+- Initial setup, structure, and idea iterations.
