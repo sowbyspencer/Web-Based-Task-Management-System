@@ -67,7 +67,7 @@ function addTaskToDOM(task: Task) {
     // Create and append title content as input
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
-    titleInput.id = task.title + ' Title'; // matching 'id' attribute
+    titleInput.id = task.title; // matching 'id' attribute
     titleInput.classList.add('task-title');
     titleInput.value = task.title;
     if (task.completed) {
@@ -84,7 +84,7 @@ function addTaskToDOM(task: Task) {
 
     // Create and append description content as textarea
     const descriptionTextarea = document.createElement('textarea');
-    descriptionTextarea.id = task.title + 'taskDescription'; // matching 'id' attribute
+    descriptionTextarea.id = 'taskDescription'; // matching 'id' attribute
     descriptionTextarea.classList.add('task-description');
     if (task.completed) {
         descriptionTextarea.classList.add('task-completed');
@@ -105,13 +105,17 @@ function addTaskToDOM(task: Task) {
     addTaskEventListeners(taskElement, task);
 
     // Save tasks to local storage
-    taskManager.saveTasks("addTaskToDOM");
+    // taskManager.saveTasks("addTaskToDOM");
 }
 
 
 function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
     const checkButton = taskElement.querySelector('.task-check');
     const deleteButton = taskElement.querySelector('.task-delete');
+    /* The line `const titleElement = taskElement.querySelector('.task-title');`
+    is using the `querySelector` method to find the HTML element with the class
+    name "task-title" within the `taskElement`. It assigns the found element to
+    the `titleElement` variable. */
     const titleElement = taskElement.querySelector('.task-title');
     const descriptionElement = taskElement.querySelector('.task-description');
 
@@ -130,7 +134,8 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
 
     if (titleElement) {
         titleElement.addEventListener('blur', () => {
-            const newTitle = titleElement.textContent || ''; // Fallback to empty string if null
+            // Asserting titleElement as HTMLInputElement to access the value property
+            const newTitle = (titleElement as HTMLInputElement).value;
             updateTaskTitle(task, newTitle);
         });
     } else {
@@ -139,13 +144,13 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
     
     if (descriptionElement) {
         descriptionElement.addEventListener('blur', () => {
-            const newDescription = descriptionElement.textContent || '';
-            updateTaskDescription(task, newDescription)
+            // Asserting descriptionElement as HTMLTextAreaElement (if it's a textarea)
+            const newDescription = (descriptionElement as HTMLTextAreaElement).value;
+            updateTaskDescription(task, newDescription);
         });
     } else {
         console.error('Description Element not found in task element');
     }
-
 }
 
 /**
@@ -172,17 +177,17 @@ function toggleTaskCompletion(task: Task, taskElement: Element) {
     if (titleElement){
         titleElement.classList.toggle('task-completed', task.completed);
     } else {
-        console.log("Title Element not found.")
+        console.error("Title Element not found.")
     }
     
     if (descriptionElement) {
         descriptionElement.classList.toggle('task-completed', task.completed);
     } else {
-        console.log("Description Element not found.")
+        console.error("Description Element not found.")
     }
     
-
     taskManager.saveTasks("toggleTaskCompletion"); // Save the updated tasks to local storage
+    showNotification('Task Saved!');
 }
 
 /**
@@ -197,17 +202,20 @@ function deleteTask(task: Task, taskElement: Element) {
     taskManager.removeTask(task.title);
     taskElement.remove();
     taskManager.saveTasks("deleteTask");
+    showNotification('Task Saved!');
 }
 
 function updateTaskTitle(task: Task, newTitle: string) {
     task.updateTitle(newTitle); // Update title method in Task class
     taskManager.saveTasks("updateTaskTitle");
+    showNotification('Task Saved!');
     // Any additional logic...
 }
 
 function updateTaskDescription(task: Task, newDescription: string) {
     task.updateDescription(newDescription); // Update description method in Task class
     taskManager.saveTasks("updateTaskDescription");
+    showNotification('Task Saved!');
     // Any additional logic...
 }
     
@@ -217,7 +225,7 @@ function searchTasks(searchTerm: string) {
     const allTasks = taskManager.getTasks();
 
     // Filter tasks based on search criteria with case priority
-    const filteredTasks = allTasks
+    var filteredTasks = allTasks
         .filter(task => task.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                         task.description.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((taskA, taskB) => {
@@ -238,6 +246,31 @@ function searchTasks(searchTerm: string) {
             };
             return score(taskB) - score(taskA); // Sort in descending order of score
         });
+
+        // If no matches found, search for individual words in the search term
+        if (filteredTasks.length === 0) {
+            const searchWords = searchTerm.split(/\s+/); // Split search term into words
+            filteredTasks = allTasks
+                .filter(task => {
+                    // Check if any word in searchWords is in title or description
+                    return searchWords.some(word => 
+                        task.title.toLowerCase().includes(word.toLowerCase()) ||
+                        task.description.toLowerCase().includes(word.toLowerCase())
+                    );
+                })
+                .sort((taskA, taskB) => {
+                    // Scoring function for individual word matches
+                    const score = (task: Task) => {
+                        let score = 0;
+                        searchWords.forEach(word => {
+                            if (task.title.toLowerCase().includes(word.toLowerCase())) score += 1; // Lower score for title matches
+                            if (task.description.toLowerCase().includes(word.toLowerCase())) score += 0.5; // Even lower score for description matches
+                        });
+                        return score;
+                    };
+                    return score(taskB) - score(taskA); // Sort in descending order of score
+                });
+        }
 
     // Clear existing tasks from the display
     clearTasksDisplay();
@@ -262,3 +295,25 @@ searchBar.addEventListener('input', (event) => {
     const searchTerm = target.value.trim();
     searchTasks(searchTerm);
 });
+
+function showNotification(message: string, duration: number = 2000) {
+    // Create and style the notification element
+    const notificationBox = document.createElement('div');
+    notificationBox.className = 'notification-box';
+    notificationBox.textContent = message;
+
+    // Add to the body
+    document.body.appendChild(notificationBox);
+
+    // Set a timeout to fade out the notification
+    setTimeout(() => {
+        notificationBox.style.animation = 'fadeOut 0.5s ease forwards';
+    }, duration - 500); // Start fade out 0.5s before hiding completely
+
+    // Remove the notification after the specified duration
+    setTimeout(() => {
+        notificationBox.remove();
+    }, duration);
+}
+
+
