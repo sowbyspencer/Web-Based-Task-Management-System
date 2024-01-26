@@ -182,32 +182,40 @@ function updateTaskDescription(task, newDescription) {
     taskManager.saveTasks("updateTaskDescription");
     // Any additional logic...
 }
-// Search function: Filters tasks based on search criteria and updates the UI
+// Enhanced search function with case-sensitive priority
 function searchTasks(searchTerm) {
-    // Step 1: Retrieve all tasks
+    // Retrieve all tasks
     var allTasks = taskManager.getTasks();
-    // Step 2: Filter tasks based on search criteria
-    // Prioritize tasks where the search term is found in both title and description,
-    // then where it's found only in the title, and finally in the description.
+    // Filter tasks based on search criteria with case priority
     var filteredTasks = allTasks
-        .filter(function (task) { return task.title.includes(searchTerm) || task.description.includes(searchTerm); })
+        .filter(function (task) { return task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        task.description.toLowerCase().includes(searchTerm.toLowerCase()); })
         .sort(function (taskA, taskB) {
-        // Scoring function to prioritize search results
+        // Enhanced scoring function to prioritize search results
         var score = function (task) {
             var score = 0;
+            // Exact case match in title
             if (task.title.includes(searchTerm))
-                score += 2;
+                score += 4;
+            // Case-insensitive match in title
+            else if (task.title.toLowerCase().includes(searchTerm.toLowerCase()))
+                score += 3;
+            // Exact case match in description
             if (task.description.includes(searchTerm))
+                score += 2;
+            // Case-insensitive match in description
+            else if (task.description.toLowerCase().includes(searchTerm.toLowerCase()))
                 score += 1;
             return score;
         };
         return score(taskB) - score(taskA); // Sort in descending order of score
     });
-    // Step 3: Clear existing tasks from the display
+    // Clear existing tasks from the display
     clearTasksDisplay();
-    // Step 4: Add filtered tasks to the display
+    // Add filtered tasks to the display
     filteredTasks.forEach(addTaskToDOM);
 }
+// ... rest of the code including the event listener ...
 // Helper function: Clears all tasks from the display
 function clearTasksDisplay() {
     // Select the task display container and clear its content
