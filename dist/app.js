@@ -1,71 +1,59 @@
-import { Task } from './Task.js';
 import { TaskManager } from './TaskManager.js';
-
 // Creating a new instance of then`TaskManager` class 
-const taskManager = new TaskManager();
-
-document.addEventListener('DOMContentLoaded', () => {
+var taskManager = new TaskManager();
+document.addEventListener('DOMContentLoaded', function () {
     taskManager.loadTasks();
     taskManager.getTasks().forEach(addTaskToDOM);
 });
-
-
 /* These lines of code are retrieving HTML elements from the DOM (Document Object
 Model) and assigning them to variables with specific types. */
-const form = document.getElementById('addTaskForm') as HTMLFormElement;
-const titleInput = document.getElementById('taskTitle') as HTMLInputElement;
-const descriptionInput = document.getElementById('taskDescription') as HTMLTextAreaElement;
-const tasksDisplay = document.getElementById('tasksDisplay') as HTMLDivElement;
-const searchBar = document.getElementById('searchBar') as HTMLInputElement;
-
+var form = document.getElementById('addTaskForm');
+var titleInput = document.getElementById('taskTitle');
+var descriptionInput = document.getElementById('taskDescription');
+var tasksDisplay = document.getElementById('tasksDisplay');
+var searchBar = document.getElementById('searchBar');
 /* This is an event listener function that is triggered when the form is
 submitted. */
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', function (event) {
     // Prevent the form from submitting the traditional way
     event.preventDefault();
-
     // Retrieving and setting title and description
-    const title = titleInput.value.trim();
-    const description = descriptionInput.value.trim();
-
-    /* Checks if the `title` variable has a value. If it does, it means that the 
+    var title = titleInput.value.trim();
+    var description = descriptionInput.value.trim();
+    /* Checks if the `title` variable has a value. If it does, it means that the
     user has entered a title for the task. */
     if (title) {
-        const newTask = taskManager.addTask(title, description);
+        var newTask = taskManager.addTask(title, description);
         addTaskToDOM(newTask);
         titleInput.value = ''; // Reset the title input
         descriptionInput.value = ''; // Reset the description input
     }
 });
-
 /**
  * The function `addTaskToDOM` creates HTML elements for a task and appends them
  * to the DOM.
  * @param {Task} task - The `task` parameter is an object that represents a task.
  * It has the following properties:
  */
-function addTaskToDOM(task: Task) {
+function addTaskToDOM(task) {
     // Create task container
-    const taskElement = document.createElement('div');
+    var taskElement = document.createElement('div');
     taskElement.classList.add('task');
-    
     // Create and append checkbox
-    const checkBox = document.createElement('input');
-    checkBox.name = 'CheckBox'
+    var checkBox = document.createElement('input');
+    checkBox.name = 'CheckBox';
     checkBox.type = 'checkbox';
     checkBox.classList.add('task-check');
     checkBox.checked = task.completed; // Set checked status based on task completion
     taskElement.appendChild(checkBox);
-
     // Create and append title label
-    const titleLabel = document.createElement('label');
+    var titleLabel = document.createElement('label');
     titleLabel.classList.add('task-label');
     titleLabel.textContent = 'Title';
     titleLabel.htmlFor = 'taskTitle'; // 'for' attribute
     taskElement.appendChild(titleLabel);
-
     // Create and append title content as input
-    const titleInput = document.createElement('input');
+    var titleInput = document.createElement('input');
     titleInput.type = 'text';
     titleInput.id = task.title + ' Title'; // matching 'id' attribute
     titleInput.classList.add('task-title');
@@ -74,16 +62,14 @@ function addTaskToDOM(task: Task) {
         titleInput.classList.add('task-completed');
     }
     taskElement.appendChild(titleInput);
-
     // Create and append description label
-    const descriptionLabel = document.createElement('label');
+    var descriptionLabel = document.createElement('label');
     descriptionLabel.classList.add('task-label');
     descriptionLabel.textContent = 'Description';
     descriptionLabel.htmlFor = 'taskDescription'; // 'for' attribute
     taskElement.appendChild(descriptionLabel);
-
     // Create and append description content as textarea
-    const descriptionTextarea = document.createElement('textarea');
+    var descriptionTextarea = document.createElement('textarea');
     descriptionTextarea.id = task.title + 'taskDescription'; // matching 'id' attribute
     descriptionTextarea.classList.add('task-description');
     if (task.completed) {
@@ -91,63 +77,55 @@ function addTaskToDOM(task: Task) {
     }
     descriptionTextarea.textContent = task.description;
     taskElement.appendChild(descriptionTextarea);
-
     // Create and append delete button
-    const deleteButton = document.createElement('button');
+    var deleteButton = document.createElement('button');
     deleteButton.classList.add('task-delete');
     deleteButton.textContent = 'Delete';
     taskElement.appendChild(deleteButton);
-
     // Append task element to the display container
     tasksDisplay.appendChild(taskElement);
-
     // Add event listeners to the new elements
     addTaskEventListeners(taskElement, task);
-
     // Save tasks to local storage
     taskManager.saveTasks("addTaskToDOM");
 }
-
-
-function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
-    const checkButton = taskElement.querySelector('.task-check');
-    const deleteButton = taskElement.querySelector('.task-delete');
-    const titleElement = taskElement.querySelector('.task-title');
-    const descriptionElement = taskElement.querySelector('.task-description');
-
+function addTaskEventListeners(taskElement, task) {
+    var checkButton = taskElement.querySelector('.task-check');
+    var deleteButton = taskElement.querySelector('.task-delete');
+    var titleElement = taskElement.querySelector('.task-title');
+    var descriptionElement = taskElement.querySelector('.task-description');
     // Check if checkButton is not null before adding event listener
     if (checkButton) {
-        checkButton.addEventListener('click', () => toggleTaskCompletion(task, taskElement));
-    } else {
+        checkButton.addEventListener('click', function () { return toggleTaskCompletion(task, taskElement); });
+    }
+    else {
         console.error('Check Button not found in task element');
     }
-    
     if (deleteButton) {
-        deleteButton.addEventListener('click', () => deleteTask(task, taskElement));
-    } else {
+        deleteButton.addEventListener('click', function () { return deleteTask(task, taskElement); });
+    }
+    else {
         console.error('Delete Button not found in task element');
     }
-
     if (titleElement) {
-        titleElement.addEventListener('blur', () => {
-            const newTitle = titleElement.textContent || ''; // Fallback to empty string if null
+        titleElement.addEventListener('blur', function () {
+            var newTitle = titleElement.textContent || ''; // Fallback to empty string if null
             updateTaskTitle(task, newTitle);
         });
-    } else {
+    }
+    else {
         console.error('Title Element not found in task element');
     }
-    
     if (descriptionElement) {
-        descriptionElement.addEventListener('blur', () => {
-            const newDescription = descriptionElement.textContent || '';
-            updateTaskDescription(task, newDescription)
+        descriptionElement.addEventListener('blur', function () {
+            var newDescription = descriptionElement.textContent || '';
+            updateTaskDescription(task, newDescription);
         });
-    } else {
+    }
+    else {
         console.error('Description Element not found in task element');
     }
-
 }
-
 /**
  * The function toggles the completion status of a task and updates the
  * corresponding task element's appearance.
@@ -158,33 +136,29 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
  * and description elements of the task so that their appearance can be updated
  * based on the task's completion status.
  */
-function toggleTaskCompletion(task: Task, taskElement: Element) {
+function toggleTaskCompletion(task, taskElement) {
     // Toggle the task's completed status
-    task.checkTask(); 
-
+    task.checkTask();
     // Find the checkbox element
-    const checkBox = taskElement.querySelector('.task-check') as HTMLInputElement;
-
+    var checkBox = taskElement.querySelector('.task-check');
     // Update the checkbox state and the UI
     checkBox.checked = task.completed;
-    const titleElement = taskElement.querySelector('.task-title');
-    const descriptionElement = taskElement.querySelector('.task-description');
-    if (titleElement){
+    var titleElement = taskElement.querySelector('.task-title');
+    var descriptionElement = taskElement.querySelector('.task-description');
+    if (titleElement) {
         titleElement.classList.toggle('task-completed', task.completed);
-    } else {
-        console.log("Title Element not found.")
     }
-    
+    else {
+        console.log("Title Element not found.");
+    }
     if (descriptionElement) {
         descriptionElement.classList.toggle('task-completed', task.completed);
-    } else {
-        console.log("Description Element not found.")
     }
-    
-
+    else {
+        console.log("Description Element not found.");
+    }
     taskManager.saveTasks("toggleTaskCompletion"); // Save the updated tasks to local storage
 }
-
 /**
  * The function deletes a task from a task manager and removes its
  * corresponding element from the DOM.
@@ -193,62 +167,56 @@ function toggleTaskCompletion(task: Task, taskElement: Element) {
  * @param {Element} taskElement - The taskElement parameter is the HTML
  * element that represents the task in the user interface.
  */
-function deleteTask(task: Task, taskElement: Element) {
+function deleteTask(task, taskElement) {
     taskManager.removeTask(task.title);
     taskElement.remove();
     taskManager.saveTasks("deleteTask");
 }
-
-function updateTaskTitle(task: Task, newTitle: string) {
+function updateTaskTitle(task, newTitle) {
     task.updateTitle(newTitle); // Update title method in Task class
     taskManager.saveTasks("updateTaskTitle");
     // Any additional logic...
 }
-
-function updateTaskDescription(task: Task, newDescription: string) {
+function updateTaskDescription(task, newDescription) {
     task.updateDescription(newDescription); // Update description method in Task class
     taskManager.saveTasks("updateTaskDescription");
     // Any additional logic...
 }
-    
 // Search function: Filters tasks based on search criteria and updates the UI
-function searchTasks(searchTerm: string) {
+function searchTasks(searchTerm) {
     // Step 1: Retrieve all tasks
-    const allTasks = taskManager.getTasks();
-
+    var allTasks = taskManager.getTasks();
     // Step 2: Filter tasks based on search criteria
     // Prioritize tasks where the search term is found in both title and description,
     // then where it's found only in the title, and finally in the description.
-    const filteredTasks = allTasks
-        .filter(task => task.title.includes(searchTerm) || task.description.includes(searchTerm))
-        .sort((taskA, taskB) => {
-            // Scoring function to prioritize search results
-            const score = (task: Task) => {
-                let score = 0;
-                if (task.title.includes(searchTerm)) score += 2;
-                if (task.description.includes(searchTerm)) score += 1;
-                return score;
-            };
-            return score(taskB) - score(taskA); // Sort in descending order of score
-        });
-
+    var filteredTasks = allTasks
+        .filter(function (task) { return task.title.includes(searchTerm) || task.description.includes(searchTerm); })
+        .sort(function (taskA, taskB) {
+        // Scoring function to prioritize search results
+        var score = function (task) {
+            var score = 0;
+            if (task.title.includes(searchTerm))
+                score += 2;
+            if (task.description.includes(searchTerm))
+                score += 1;
+            return score;
+        };
+        return score(taskB) - score(taskA); // Sort in descending order of score
+    });
     // Step 3: Clear existing tasks from the display
     clearTasksDisplay();
-
     // Step 4: Add filtered tasks to the display
     filteredTasks.forEach(addTaskToDOM);
 }
-
 // Helper function: Clears all tasks from the display
 function clearTasksDisplay() {
     // Select the task display container and clear its content
     tasksDisplay.innerHTML = '';
 }
-
 // Event listener for the search input field
 // Trigger searchTasks function when the user types in the search field
-searchBar.addEventListener('input', (event) => {
-    const target = event.target as HTMLInputElement;
-    const searchTerm = target.value.trim();
+searchBar.addEventListener('input', function (event) {
+    var target = event.target;
+    var searchTerm = target.value.trim();
     searchTasks(searchTerm);
 });

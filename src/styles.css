@@ -1,86 +1,213 @@
 /* Basic Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
-    padding: 20px;
+body, html {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
-    background: #007bff;
-    color: #fff;
-    text-align: center;
-    padding: 10px 0;
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  text-align: center;
 }
 
-header h1 {
-    margin: 0;
+#searchSection {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px auto; /* Centers the search section */
+  width: calc(100% - 40px); /* Adjusts the width to account for padding */
+}
+
+#searchBar {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 main {
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  flex: 1;
 }
 
-section {
-    margin-bottom: 20px;
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.tasksContainer {
+  display: flex;
+  justify-content: space-between;
 }
 
-section h2 {
-    color: #333;
+.tasksDisplay {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#task-form input[type="text"],
-#task-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.tasksDisplay h3 {
+  margin-top: 0;
+  color: #333; /* Darker text for the title */
 }
 
-#task-form button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background: #28a745;
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
+.tasksDisplay p {
+  color: #666; /* Lighter text for the description */
 }
 
-#task-form button:hover {
-    background: #218838;
+#tasksDisplay,
+#taskAddition {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
-#tasks-container {
-    margin-top: 10px;
+#tasksDisplay {
+  width: 65%;
+}
+
+#taskAddition {
+  width: 30%;
+}
+
+#taskDisplay ul {
+  list-style-type: none;
+}
+
+#taskDisplay ul li {
+  background-color: #fff;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#taskAddition {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  width: 30%;
+}
+
+#addTaskForm input,
+#addTaskForm textarea {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#addTaskForm button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#addTaskForm button:hover {
+  background-color: #0056b3;
+}
+
+.task {
+  border: 1px solid #ddd;
+  padding: 10px;
+  padding-bottom: 40px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  position: relative;
+  display: flex; /* Use flexbox for better alignment */
+  flex-direction: column; /* Stack elements vertically */
+}
+
+.task-check {
+  align-self: flex-start; /* Align checkbox to the start */
+  margin-bottom: 10px; /* Add some space below the checkbox */
+}
+
+.task-title {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.task-description {
+  margin-top: 5px; /* Add space between title and description */
+  overflow-wrap: break-word;
+}
+
+.task-delete {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  border: none;
+  background-color: #ff6347;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.task-delete:hover {
+  background-color: #ff2e1c;
+}
+
+/* Clearfix for float */
+.task:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Styling for input fields */
+.task-title, .task-description {
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  width: 100%; /* Ensure full width */
+}
+
+/* Additional specific styling for textarea */
+.task-description {
+  height: auto; /* Adjust height as needed */
+  resize: vertical; /* Allows vertical resizing */
+}
+
+
+.task-label {
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 footer {
-    text-align: center;
-    margin-top: 20px;
-    color: #666;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  padding: 20px;
+  background-color: #f8f8f8;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-    body {
-        padding: 10px;
-    }
-
-    header h1 {
-        font-size: 1.5em;
-    }
+.task-completed {
+  text-decoration: line-through;
+  color: #666;
 }

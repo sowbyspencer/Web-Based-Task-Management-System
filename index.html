@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" type="text/css" href="src/styles.css" />
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Task Manager</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+        <!-- Search Section -->
+        <section id="searchSection">
+            <input type="text" id="searchBar" placeholder="Search tasks...">
+        </section>
+
+        <!-- Task Display and Addition Sections -->
+        <div class="tasksContainer">
+            <!-- Task Display Section -->
+            <section id="tasksDisplay">
+                <h2>Tasks</h2>
+                <ul id="taskList">
+                    <!-- Tasks will be listed here -->
+                </ul>
+            </section>
+
+            <!-- Task Addition Section -->
+            <aside id="taskAddition">
+                <h2>Add New Task</h2>
+                <form id="addTaskForm">
+                    <input type="text" id="taskTitle" placeholder="Task Title" required><br>
+                    <textarea id="taskDescription" placeholder="Task Description"></textarea><br>
+                    <button type="submit">Add Task</button>
+                </form>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>© 2024 Task Manager. All rights reserved.</p>
+        <a href="#">Help/FAQ</a>
+    </footer>
+    <script type ="module" src="dist/app.js"></script>  
+</body>
+</html>
