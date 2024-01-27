@@ -343,4 +343,21 @@ function showNotification(message: string, duration: number = 2000) {
     setTimeout(() => {
         notificationBox.remove();
     }, duration);
+
+    const lastSavedTimestamp = '2024-01-27 14:39:00'; // Update this manually with the current date and time
+
+    function appendLastSavedTimestamp() {
+        const footerElement = document.createElement('div');
+        footerElement.textContent = `Last updated: ${lastSavedTimestamp}`;
+        footerElement.style.textAlign = 'center';
+    
+        // Assuming you have a container element to append this information
+        const container = document.getElementById('timeStamp'); // Replace 'container' with your actual container element's ID
+        if (container) {
+            container.appendChild(footerElement);
+        }
+    }
+    
+    // Call the function to append the timestamp
+    appendLastSavedTimestamp();
 }
