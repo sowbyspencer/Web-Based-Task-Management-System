@@ -1,5 +1,6 @@
 export class Task {
     /* The code snippet is defining the properties of the `Task` class. */
+    id: string;
     title: string;
     description: string;
     completed: boolean;
@@ -21,7 +22,13 @@ export class Task {
      * @param {boolean} [completed=false] - A boolean value indicating whether the
      * task is completed or not. It is set to false by default.
      */
-    constructor(title: string, description: string, completed: boolean, parentTask?: Task) {
+    constructor(title: string, description: string, completed: boolean, id?: string, parentTask?: Task) {
+        if (id){
+            this.id = id
+        }
+        else{
+            this.id = 'task-' + Date.now();
+        }
         this.title = title;
         this.description = description;
         this.completed = completed;

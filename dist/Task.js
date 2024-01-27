@@ -14,7 +14,13 @@ var Task = /** @class */ (function () {
      * @param {boolean} [completed=false] - A boolean value indicating whether the
      * task is completed or not. It is set to false by default.
      */
-    function Task(title, description, completed, parentTask) {
+    function Task(title, description, completed, id, parentTask) {
+        if (id) {
+            this.id = id;
+        }
+        else {
+            this.id = 'task-' + Date.now();
+        }
         this.title = title;
         this.description = description;
         this.completed = completed;

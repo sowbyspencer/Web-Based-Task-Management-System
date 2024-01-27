@@ -11,8 +11,8 @@ export class TaskManager {
      * @param {string} description - A string that describes the task.
      * @returns a new task object.
      */
-    addTask(title: string, description: string): Task {
-        const newTask = new Task(title, description, false);
+    addTask(title: string, description: string, id?: string): Task {
+        const newTask = new Task(title, description, false, id);
         this.tasks.push(newTask);
         return newTask;
     }
@@ -22,8 +22,8 @@ export class TaskManager {
      * @param {string} taskTitle - The taskTitle parameter is a string that
      * represents the title of the task that needs to be removed.
      */
-    removeTask(taskTitle: string): void {
-        this.tasks = this.tasks.filter(task => task.title !== taskTitle);
+    removeTask(taskId: string): void {
+        this.tasks = this.tasks.filter(task => task.id !== taskId);
     }
 
     // Example of a method to list all tasks (we will handle recursion later)
@@ -49,7 +49,7 @@ export class TaskManager {
         const tasksJson = localStorage.getItem('tasks');
         if (tasksJson) {
             this.tasks = JSON.parse(tasksJson).map((task: Task) => {
-                return new Task(task.title, task.description, task.completed);
+                return new Task(task.title, task.description, task.completed, task.id);
             });
         }
     }

@@ -1,25 +1,37 @@
+/**
+ * This TypeScript code creates a task manager application that allows users to
+ * add, delete, and search for tasks.
+ * @param {Task} task - The parameter `task` is of type `Task`, which is a custom
+ * class representing a task object. It contains properties such as `title`,
+ * `description`, and `completed` that hold the relevant information for a task.
+ * 
+ * Run
+ * tsc -w
+ * to automatically compile TypeScript to JavaScript upon changes, you can use
+ * tsc -w in your terminal. This command watches for changes in your TypeScript
+ * files and compiles them instantly.
+ */
+
 import { Task } from './Task.js';
 import { TaskManager } from './TaskManager.js';
 
 // Creating a new instance of then`TaskManager` class 
 const taskManager = new TaskManager();
 
-document.addEventListener('DOMContentLoaded', () => {
-    taskManager.loadTasks();
-    taskManager.getTasks().forEach(addTaskToDOM);
-});
-
-
-/* These lines of code are retrieving HTML elements from the DOM (Document Object
-Model) and assigning them to variables with specific types. */
+// Retrieve DOM elements and assign them to appropriately typed variables
 const form = document.getElementById('addTaskForm') as HTMLFormElement;
 const titleInput = document.getElementById('taskTitle') as HTMLInputElement;
 const descriptionInput = document.getElementById('taskDescription') as HTMLTextAreaElement;
 const tasksDisplay = document.getElementById('tasksDisplay') as HTMLDivElement;
 const searchBar = document.getElementById('searchBar') as HTMLInputElement;
 
-/* This is an event listener function that is triggered when the form is
-submitted. */
+// Load tasks and bind DOM events when the DOM content is fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    taskManager.loadTasks();
+    taskManager.getTasks().forEach(addTaskToDOM);
+});
+
+// Add event listener to handle form submission
 form.addEventListener('submit', (event) => {
     // Prevent the form from submitting the traditional way
     event.preventDefault();
@@ -38,11 +50,22 @@ form.addEventListener('submit', (event) => {
     }
 });
 
+// Event listener for the search input field
+// Trigger searchTasks function when the user types in the search field
+searchBar.addEventListener('input', (event) => {
+    const target = event.target as HTMLInputElement;
+    const searchTerm = target.value.trim();
+    searchTasks(searchTerm);
+});
+
+
 /**
  * The function `addTaskToDOM` creates HTML elements for a task and appends them
  * to the DOM.
- * @param {Task} task - The `task` parameter is an object that represents a task.
- * It has the following properties:
+ * @param {Task} task - The parameter `task` is of type `Task`, which is a
+ * custom class representing a task object. It contains properties
+ * such as `title`, `description`, and `completed` that hold the relevant
+ * information for a task.
  */
 function addTaskToDOM(task: Task) {
     // Create task container
@@ -61,13 +84,13 @@ function addTaskToDOM(task: Task) {
     const titleLabel = document.createElement('label');
     titleLabel.classList.add('task-label');
     titleLabel.textContent = 'Title';
-    titleLabel.htmlFor = 'taskTitle'; // 'for' attribute
+    titleLabel.htmlFor = 'title-' + task.id; // 'for' attribute
     taskElement.appendChild(titleLabel);
 
     // Create and append title content as input
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
-    titleInput.id = task.title; // matching 'id' attribute
+    titleInput.id = 'title-' + task.id; // matching 'id' attribute
     titleInput.classList.add('task-title');
     titleInput.value = task.title;
     if (task.completed) {
@@ -79,12 +102,12 @@ function addTaskToDOM(task: Task) {
     const descriptionLabel = document.createElement('label');
     descriptionLabel.classList.add('task-label');
     descriptionLabel.textContent = 'Description';
-    descriptionLabel.htmlFor = 'taskDescription'; // 'for' attribute
+    descriptionLabel.htmlFor = 'description-' + task.id; // 'for' attribute
     taskElement.appendChild(descriptionLabel);
 
     // Create and append description content as textarea
     const descriptionTextarea = document.createElement('textarea');
-    descriptionTextarea.id = 'taskDescription'; // matching 'id' attribute
+    descriptionTextarea.id = 'description-' + task.id; // matching 'id' attribute
     descriptionTextarea.classList.add('task-description');
     if (task.completed) {
         descriptionTextarea.classList.add('task-completed');
@@ -104,18 +127,22 @@ function addTaskToDOM(task: Task) {
     // Add event listeners to the new elements
     addTaskEventListeners(taskElement, task);
 
-    // Save tasks to local storage
-    // taskManager.saveTasks("addTaskToDOM");
+    /* The above code is calling the `saveTasks` function from the `taskManager`
+    object and passing the argument "addTaskToDOM". It then calls the
+    `showNotification` function with the argument 'Task Saved!'. */
+    taskManager.saveTasks("addTaskToDOM");
+    showNotification('Task Saved!');
 }
 
-
+/**
+ * Adds event listeners to task elements for interactivity.
+ * @param {HTMLElement} taskElement - The HTML element representing the task.
+ * @param {Task} task - The task object associated with the element.
+ */
 function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
+
     const checkButton = taskElement.querySelector('.task-check');
     const deleteButton = taskElement.querySelector('.task-delete');
-    /* The line `const titleElement = taskElement.querySelector('.task-title');`
-    is using the `querySelector` method to find the HTML element with the class
-    name "task-title" within the `taskElement`. It assigns the found element to
-    the `titleElement` variable. */
     const titleElement = taskElement.querySelector('.task-title');
     const descriptionElement = taskElement.querySelector('.task-description');
 
@@ -154,14 +181,9 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
 }
 
 /**
- * The function toggles the completion status of a task and updates the
- * corresponding task element's appearance.
- * @param {Task} task - The `task` parameter is an object of type `Task`. It
- * represents a specific task that needs to be toggled for completion.
- * @param {Element} taskElement - The `taskElement` parameter is an HTML element
- * that represents the task in the user interface. It is used to find the title
- * and description elements of the task so that their appearance can be updated
- * based on the task's completion status.
+ * Toggles the completion status of a task and updates UI accordingly.
+ * @param {Task} task - The task to toggle.
+ * @param {Element} taskElement - The DOM element of the task.
  */
 function toggleTaskCompletion(task: Task, taskElement: Element) {
     // Toggle the task's completed status
@@ -191,20 +213,22 @@ function toggleTaskCompletion(task: Task, taskElement: Element) {
 }
 
 /**
- * The function deletes a task from a task manager and removes its
- * corresponding element from the DOM.
- * @param {Task} task - The `task` parameter is of type `Task` and represents
- * the task that needs to be deleted.
- * @param {Element} taskElement - The taskElement parameter is the HTML
- * element that represents the task in the user interface.
+ * Deletes a task and its associated DOM element.
+ * @param {Task} task - The task to delete.
+ * @param {Element} taskElement - The DOM element of the task.
  */
 function deleteTask(task: Task, taskElement: Element) {
-    taskManager.removeTask(task.title);
+    taskManager.removeTask(task.id);
     taskElement.remove();
     taskManager.saveTasks("deleteTask");
     showNotification('Task Saved!');
 }
 
+/**
+ * Updates the title of a task.
+ * @param {Task} task - The task to update.
+ * @param {string} newTitle - The new title for the task.
+ */
 function updateTaskTitle(task: Task, newTitle: string) {
     task.updateTitle(newTitle); // Update title method in Task class
     taskManager.saveTasks("updateTaskTitle");
@@ -212,6 +236,11 @@ function updateTaskTitle(task: Task, newTitle: string) {
     // Any additional logic...
 }
 
+/**
+ * Updates the description of a task.
+ * @param {Task} task - The task to update.
+ * @param {string} newDescription - The new description for the task.
+ */
 function updateTaskDescription(task: Task, newDescription: string) {
     task.updateDescription(newDescription); // Update description method in Task class
     taskManager.saveTasks("updateTaskDescription");
@@ -219,7 +248,11 @@ function updateTaskDescription(task: Task, newDescription: string) {
     // Any additional logic...
 }
     
-// Enhanced search function with case-sensitive priority
+/**
+ * The function `searchTasks` filters and sorts tasks based on a search term,
+ * prioritizing exact case matches in the title and description.
+ * @param {string} searchTerm - The term to search for in tasks.
+ */
 function searchTasks(searchTerm: string) {
     // Retrieve all tasks
     const allTasks = taskManager.getTasks();
@@ -279,23 +312,19 @@ function searchTasks(searchTerm: string) {
     filteredTasks.forEach(addTaskToDOM);
 }
 
-// ... rest of the code including the event listener ...
-
-
-// Helper function: Clears all tasks from the display
+/**
+ * Clears all tasks from the task display area in the DOM.
+ */
 function clearTasksDisplay() {
     // Select the task display container and clear its content
     tasksDisplay.innerHTML = '';
 }
 
-// Event listener for the search input field
-// Trigger searchTasks function when the user types in the search field
-searchBar.addEventListener('input', (event) => {
-    const target = event.target as HTMLInputElement;
-    const searchTerm = target.value.trim();
-    searchTasks(searchTerm);
-});
-
+/**
+ * Displays a notification message with a timed fade-out effect.
+ * @param {string} message - The message to display.
+ * @param {number} duration - Duration for the notification to show (default: 2000ms).
+ */
 function showNotification(message: string, duration: number = 2000) {
     // Create and style the notification element
     const notificationBox = document.createElement('div');
@@ -315,5 +344,3 @@ function showNotification(message: string, duration: number = 2000) {
         notificationBox.remove();
     }, duration);
 }
-
-

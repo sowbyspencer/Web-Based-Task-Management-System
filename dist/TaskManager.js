@@ -11,8 +11,8 @@ var TaskManager = /** @class */ (function () {
      * @param {string} description - A string that describes the task.
      * @returns a new task object.
      */
-    TaskManager.prototype.addTask = function (title, description) {
-        var newTask = new Task(title, description, false);
+    TaskManager.prototype.addTask = function (title, description, id) {
+        var newTask = new Task(title, description, false, id);
         this.tasks.push(newTask);
         return newTask;
     };
@@ -21,8 +21,8 @@ var TaskManager = /** @class */ (function () {
      * @param {string} taskTitle - The taskTitle parameter is a string that
      * represents the title of the task that needs to be removed.
      */
-    TaskManager.prototype.removeTask = function (taskTitle) {
-        this.tasks = this.tasks.filter(function (task) { return task.title !== taskTitle; });
+    TaskManager.prototype.removeTask = function (taskId) {
+        this.tasks = this.tasks.filter(function (task) { return task.id !== taskId; });
     };
     // Example of a method to list all tasks (we will handle recursion later)
     TaskManager.prototype.getTasks = function () {
@@ -45,7 +45,7 @@ var TaskManager = /** @class */ (function () {
         var tasksJson = localStorage.getItem('tasks');
         if (tasksJson) {
             this.tasks = JSON.parse(tasksJson).map(function (task) {
-                return new Task(task.title, task.description, task.completed);
+                return new Task(task.title, task.description, task.completed, task.id);
             });
         }
     };
