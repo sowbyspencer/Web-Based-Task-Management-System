@@ -29,7 +29,7 @@ import { Task } from './Task.js';
 import { TaskManager } from './TaskManager.js';
 
 // Update this manually with the current date and time
-const lastSavedTimestamp = '2024-01-27 14:39:00';
+const lastSavedTimestamp = '2024-01-27 17:27:00';
 
 // Creates a new instance of the `TaskManager` class.
 const taskManager = new TaskManager();
