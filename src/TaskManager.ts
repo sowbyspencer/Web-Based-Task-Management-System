@@ -1,15 +1,17 @@
 import { Task } from './Task.js';
 
+/**
+ * Manages a collection of tasks, including adding, removing, saving, and loading tasks.
+ */
 export class TaskManager {
     private tasks: Task[] = [];
 
     /**
-     * The addTask function creates a new Task object with the given title and
-     * description, adds it to the tasks array, and returns the newly created
-     * task.
-     * @param {string} title - A string representing the title of the task.
-     * @param {string} description - A string that describes the task.
-     * @returns a new task object.
+     * Adds a new task to the task list.
+     * @param {string} title - Title of the new task.
+     * @param {string} description - Description of the new task.
+     * @param {string} [id] - Optional unique identifier for the task.
+     * @returns The newly created task object.
      */
     addTask(title: string, description: string, id?: string): Task {
         const newTask = new Task(title, description, false, id);
@@ -18,38 +20,38 @@ export class TaskManager {
     }
 
     /**
-     * The function removes a task from an array of tasks based on its title.
-     * @param {string} taskTitle - The taskTitle parameter is a string that
-     * represents the title of the task that needs to be removed.
+     * Removes a task from the task list based on its ID.
+     * @param {string} taskId - The unique identifier of the task to be removed.
      */
     removeTask(taskId: string): void {
         this.tasks = this.tasks.filter(task => task.id !== taskId);
     }
 
-    // Example of a method to list all tasks (we will handle recursion later)
+    /**
+     * Retrieves the current list of tasks.
+     * @returns An array of Task objects.
+     */
     getTasks(): Task[] {
         return this.tasks;
     }
 
-    /* The `saveTasks()` method is responsible for saving the tasks in the `tasks`
-    array to the browser's local storage. It converts the tasks array into a
-    JSON string using `JSON.stringify()`, and then stores the JSON string in
-    the local storage using `localStorage.setItem()`. This allows the tasks to
-    persist even if the page is refreshed or closed. */
+    /**
+     * Saves the current tasks to local storage.
+     * @param {string} calledFrom - Indicates the method's caller (for debugging or tracking).
+     */
     saveTasks(calledFrom: string): void {
         const tasksJson = JSON.stringify(this.tasks);
         localStorage.setItem('tasks', tasksJson);
     }
 
     /**
-     * The function loads tasks from local storage and converts them into Task
-     * objects.
+     * Loads tasks from local storage and converts them back into Task objects.
      */
     loadTasks(): void {
         const tasksJson = localStorage.getItem('tasks');
         if (tasksJson) {
-            this.tasks = JSON.parse(tasksJson).map((task: Task) => {
-                return new Task(task.title, task.description, task.completed, task.id);
+            this.tasks = JSON.parse(tasksJson).map((taskObj: any) => {
+                return new Task(taskObj.title, taskObj.description, taskObj.completed, taskObj.id);
             });
         }
     }

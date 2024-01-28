@@ -1,40 +1,10 @@
 # Overview
-{Important! Do not say in this section that this is college assignment. Talk about what you are trying to accomplish as a software engineer to further your learning.}
 
-{Provide a description of the software that you wrote to demonstrate the TypeScript language.}
+As a fledgling software engineer, my goal is to continually enhance my skills and knowledge in modern programming practices. This TypeScript-based Task Management System represents a step towards mastering a key web development language, allowing me to craft more efficient and scalable web applications.
 
-{Describe your purpose for writing this software.}
+This software is a web-based task manager developed using TypeScript. It offers a user-friendly interface for task management, including adding, editing, and deleting tasks, and a search feature for easy task retrieval. The system uses TypeScript's advanced features like classes and interfaces, showcasing the language's ability to enhance JavaScript code for complex applications. When a user adds or modifies a task, the changes are immediately saved to the browser's local storage. This ensures that no data is lost even if you close the browser or refresh the page. The application retrieves these tasks from local storage every time it is loaded, ensuring continuity of your task list. As the system is client-side only, it does not require server-side processing or external databases. This makes it lightweight and quick to respond, but also means that your tasks are only accessible from the browser where they were created.
 
-{Provide a link to your YouTube demonstration. It should be a 4-5 minute demo of the software running and a walkthrough of the code. Focus should be on sharing what you learned about the language syntax.}
-
-[Software Demo Video](http://youtube.link.goes.here)
-
-# Development Environment
-
-{Describe the tools that you used to develop the software}
-
-{Describe the programming language that you used and any libraries.}
-
-# Useful Websites
-
-{Make a list of websites that you found helpful in this project}
-
-- [Web Site Name](http://url.link.goes.here)
-- [Web Site Name](http://url.link.goes.here)
-
-# Future Work
-
-{Make a list of things that you need to fix, improve, and add in the future.}
-
-- Item 1
-- Item 2
-- Item 3
-
-# Overview
-
-As a fledgling software engineer, my journey involves continuous learning and application of modern programming languages and technologies. This project is a step in that journey, focusing on mastering TypeScript, a powerful language for building scalable and maintainable web applications.
-
-This software is a Task Management System designed as a web-based application. It demonstrates the use of TypeScript in creating interactive and user-friendly interfaces. The primary aim of this project is to deepen my understanding of TypeScript's syntax and features, particularly in the context of front-end web development.
+My goal in creating this software was to deepen my TypeScript skills. This project provided a practical application for the language, helping me understand its real-world utility and enhancing my capabilities as a software engineer.
 
 Watch a brief demonstration and walkthrough of the code in my YouTube video. This demo highlights key learnings and insights gained about TypeScript syntax and its application in real-world scenarios.
 
@@ -58,11 +28,15 @@ Here are some websites that were invaluable in the development of this project:
 - [MDN Web Docs](https://developer.mozilla.org/)
 - [Stack Overflow](https://stackoverflow.com/)
 - [W3Schools Online Web Tutorials](https://www.w3schools.com/)
+- [ChatGPT](https://chat.openai.com/) (Used for logic structure, bug finding, and formatting.)
 
 # Future Work
 
-There are several areas of improvement and additional features I plan to work on:
-
-- **Responsive Design**: Enhance the UI to be fully responsive for better usability across various devices.
-- **Feature Expansion**: Implement additional features like task prioritization and categorization.
-- **User Authentication**: Introduce user login functionality for personalized task management.
+Future enhancements include:
+- **Responsive Design**: Enhancing the user interface for a variety of devices.
+- **Advanced Search**: Developing a robust search function with prioritization of exact matches.
+- **Feature Expansion**: Incorporating task prioritization and categorization.
+- **Subtask Implementation**: Adding subtasks with recursive functionality for detailed task organization.
+- **Database Integration**: Connecting to a backend database for persistent storage.
+- **Personalized User Experience**: Creating user accounts and authentication mechanisms.
+- **User Authentication**: Implementing login features for personalized task management.

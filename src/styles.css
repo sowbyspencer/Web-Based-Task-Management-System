@@ -1,3 +1,4 @@
+/* Global Styles */
 /* Basic Reset */
 * {
   margin: 0;
@@ -13,6 +14,7 @@ body, html {
     flex-direction: column;
 }
 
+/* Header Style */
 header {
   background-color: #007bff;
   color: white;
@@ -20,22 +22,7 @@ header {
   text-align: center;
 }
 
-#searchSection {
-  background-color: #e9ecef;
-  padding: 15px;
-  border-radius: 5px;
-  margin: 20px auto; /* Centers the search section */
-  width: calc(100% - 40px); /* Adjusts the width to account for padding */
-}
-
-#searchBar {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
+/* Main Content Styles */
 main {
   display: flex;
   flex-direction: column;
@@ -44,27 +31,10 @@ main {
   flex: 1;
 }
 
+/* Task Container Styles */
 .tasksContainer {
   display: flex;
   justify-content: space-between;
-}
-
-.tasksDisplay {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.tasksDisplay h3 {
-  margin-top: 0;
-  color: #333; /* Darker text for the title */
-}
-
-.tasksDisplay p {
-  color: #666; /* Lighter text for the description */
 }
 
 #tasksDisplay,
@@ -83,6 +53,25 @@ main {
   width: 30%;
 }
 
+/* Task Display Styles */
+.tasksDisplay {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tasksDisplay h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.tasksDisplay p {
+  color: #666;
+}
+
 #taskDisplay ul {
   list-style-type: none;
 }
@@ -95,6 +84,7 @@ main {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Task Addition Styles */
 #taskAddition {
   background-color: #e9ecef;
   padding: 15px;
@@ -125,6 +115,7 @@ main {
   background-color: #0056b3;
 }
 
+/* Task Item Styles */
 .task {
   border: 1px solid #ddd;
   padding: 10px;
@@ -133,13 +124,13 @@ main {
   border-radius: 4px;
   background-color: #f9f9f9;
   position: relative;
-  display: flex; /* Use flexbox for better alignment */
-  flex-direction: column; /* Stack elements vertically */
+  display: flex;
+  flex-direction: column;
 }
 
 .task-check {
-  align-self: flex-start; /* Align checkbox to the start */
-  margin-bottom: 10px; /* Add some space below the checkbox */
+  align-self: flex-start;
+  margin-bottom: 10px;
 }
 
 .task-title {
@@ -150,7 +141,7 @@ main {
 }
 
 .task-description {
-  margin-top: 5px; /* Add space between title and description */
+  margin-top: 5px;
   overflow-wrap: break-word;
 }
 
@@ -170,41 +161,28 @@ main {
   background-color: #ff2e1c;
 }
 
-/* Clearfix for float */
 .task:after {
   content: "";
   display: table;
   clear: both;
 }
 
-/* Styling for input fields */
 .task-title, .task-description {
   padding: 5px;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: white;
-  width: 100%; /* Ensure full width */
+  width: 100%;
 }
 
-/* Additional specific styling for textarea */
 .task-description {
-  height: auto; /* Adjust height as needed */
-  resize: vertical; /* Allows vertical resizing */
+  height: auto;
+  resize: vertical;
 }
-
 
 .task-label {
   font-weight: bold;
   margin-top: 10px;
-}
-
-footer {
-  padding: 10px;
-  text-align: center;
-  width: 100%;
-  bottom: 0;
-  padding: 20px;
-  background-color: #f8f8f8;
 }
 
 .task-completed {
@@ -212,7 +190,32 @@ footer {
   color: #666;
 }
 
-/* CSS for fade-in and fade-out animations */
+/* Footer Style */
+footer {
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  background-color: #f8f8f8;
+}
+
+/* Search Section Style */
+#searchSection {
+  background-color: #e9ecef;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px auto;
+  width: calc(100% - 40px);
+}
+
+#searchBar {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -225,7 +228,7 @@ footer {
 
 .notification-box {
   position: fixed;
-  top: 20px; /* Adjust as needed */
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   padding: 10px;
@@ -233,7 +236,27 @@ footer {
   color: white;
   border-radius: 5px;
   z-index: 1000;
-  opacity: 0; /* Start with the box invisible */
-  animation: fadeIn 0.5s ease forwards; /* Animation to fade in */
-  /* Additional styling as needed */
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+
+/* Help/FAQ Page Specific Styles */
+article {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+}
+
+/* Styles for FAQ question headings */
+article h3 {
+  color: #007bff;
+  margin-bottom: 5px;
+}
+
+/* General text style for FAQ answers */
+article p {
+  line-height: 1.6;
 }

@@ -1,26 +1,18 @@
+/**
+ * Represents a task with title, description, completion status, and potential subtasks.
+ */
 var Task = /** @class */ (function () {
     /**
-     * The constructor function creates a new Task object with a title,
-     * description, parent task (optional), and completed status.
-     * @param {string} title - A string representing the title of the task.
-     * @param {string} description - The `description` parameter is a string that
-     * represents the description of the task. It provides additional information
-     * or details about the task.
-     * @param {Task} [parentTask] - The parentTask parameter is an optional
-     * parameter that represents the parent task of the current task. It is of
-     * type Task, which means it can hold an instance of the Task class. If a
-     * parent task is provided, it means that the current task is a subtask of the
-     * parent task.
-     * @param {boolean} [completed=false] - A boolean value indicating whether the
-     * task is completed or not. It is set to false by default.
+     * Constructs a new Task instance.
+     * @param {string} title - Title of the task.
+     * @param {string} description - Description of the task.
+     * @param {boolean} completed - Initial completion status of the task. False by default.
+     * @param {string} [id] - Optional custom identifier for the task. Generated if not provided.
+     * @param {Task} [parentTask] - Optional parent task for creating a subtask relationship.
      */
     function Task(title, description, completed, id, parentTask) {
-        if (id) {
-            this.id = id;
-        }
-        else {
-            this.id = 'task-' + Date.now();
-        }
+        if (completed === void 0) { completed = false; }
+        this.id = id ? id : 'task-' + Date.now(); // Generate a unique ID if not provided
         this.title = title;
         this.description = description;
         this.completed = completed;
@@ -28,35 +20,29 @@ var Task = /** @class */ (function () {
         this.parentTask = parentTask;
     }
     /**
-     * The addSubtask function adds a subtask to the parent task and assigns the
-     * parent task to the subtask.
-     * @param {Task} subtask - The subtask parameter is an instance of the Task
-     * class that represents a subtask of the current task.
+     * Adds a subtask to this task and links this task as its parent.
+     * @param {Task} subtask - The subtask to be added.
      */
     Task.prototype.addSubtask = function (subtask) {
         subtask.parentTask = this;
         this.subtasks.push(subtask);
     };
     /**
-     * The function "checkTask" toggles the value of the "completed" property.
+     * Toggles the completion status of this task.
      */
     Task.prototype.checkTask = function () {
         this.completed = !this.completed;
     };
     /**
-     * The function "updateTitle" updates the title property of an object with a
-     * new value.
-     * @param {string} newTitle - The new title that you want to update. It should
-     * be a string.
+     * Updates the title of this task.
+     * @param {string} newTitle - The new title for the task.
      */
     Task.prototype.updateTitle = function (newTitle) {
         this.title = newTitle;
     };
     /**
-     * The function "updateDescription" updates the description property of an
-     * object with a new string value.
-     * @param {string} newDescription - A string representing the new description
-     * that you want to update.
+     * Updates the description of this task.
+     * @param {string} newDescription - The new description for the task.
      */
     Task.prototype.updateDescription = function (newDescription) {
         this.description = newDescription;

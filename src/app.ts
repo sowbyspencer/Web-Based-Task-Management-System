@@ -1,10 +1,22 @@
 /**
- * This TypeScript code creates a task manager application that allows users to
- * add, delete, and search for tasks.
- * @param {Task} task - The parameter `task` is of type `Task`, which is a custom
- * class representing a task object. It contains properties such as `title`,
- * `description`, and `completed` that hold the relevant information for a task.
- * 
+ * This TypeScript code implements a task manager application. It provides functionality 
+ * for users to add, delete, update, and search for tasks. Users can interact with the 
+ * application to manage their tasks effectively.
+ *
+ * Key functions include:
+ *  - Adding new tasks with titles and descriptions.
+ *  - Toggling the completion status of tasks.
+ *  - Updating the titles and descriptions of existing tasks.
+ *  - Deleting tasks from the list.
+ *  - Searching for tasks based on keywords.
+ *  - Displaying notifications and the last saved timestamp.
+ *
+ * The application primarily operates on objects of the `Task` class. A `Task` object 
+ * encapsulates the properties and behaviors of a task, including its `title`, 
+ * `description`, and `completed` status.
+ */
+
+/** 
  * Run
  * tsc -w
  * to automatically compile TypeScript to JavaScript upon changes, you can use
@@ -12,85 +24,92 @@
  * files and compiles them instantly.
  */
 
+// Imports the `Task` class from `Task.js` and the `TaskManager` class from `TaskManager.js`.
 import { Task } from './Task.js';
 import { TaskManager } from './TaskManager.js';
 
-// Creating a new instance of then`TaskManager` class 
+// Update this manually with the current date and time
+const lastSavedTimestamp = '2024-01-27 14:39:00';
+
+// Creates a new instance of the `TaskManager` class.
 const taskManager = new TaskManager();
 
-// Retrieve DOM elements and assign them to appropriately typed variables
+// Retrieves DOM elements and assigns them to appropriately typed variables.
 const form = document.getElementById('addTaskForm') as HTMLFormElement;
 const titleInput = document.getElementById('taskTitle') as HTMLInputElement;
 const descriptionInput = document.getElementById('taskDescription') as HTMLTextAreaElement;
 const tasksDisplay = document.getElementById('tasksDisplay') as HTMLDivElement;
 const searchBar = document.getElementById('searchBar') as HTMLInputElement;
 
-// Load tasks and bind DOM events when the DOM content is fully loaded
+// Loads tasks and binds DOM events when the DOM content is fully loaded.
 document.addEventListener('DOMContentLoaded', () => {
     taskManager.loadTasks();
     taskManager.getTasks().forEach(addTaskToDOM);
+    // Notifies user of load.
+    showNotification('Tasks loaded!');
 });
 
-// Add event listener to handle form submission
+// Adds event listener to handle form submission.
 form.addEventListener('submit', (event) => {
-    // Prevent the form from submitting the traditional way
+    // Prevents the form from submitting in the traditional way.
     event.preventDefault();
 
-    // Retrieving and setting title and description
+    // Retrieves and sets title and description.
     const title = titleInput.value.trim();
     const description = descriptionInput.value.trim();
 
-    /* Checks if the `title` variable has a value. If it does, it means that the 
-    user has entered a title for the task. */
+    // Checks if the `title` variable has a value, indicating user entry of a task title.
     if (title) {
+        // Adds a new task to task manager and then adds the task to the DOM.
         const newTask = taskManager.addTask(title, description);
         addTaskToDOM(newTask);
-        titleInput.value = ''; // Reset the title input
-        descriptionInput.value = ''; // Reset the description input
+
+        // Resets the title input.
+        titleInput.value = '';
+        // Resets the description input.
+        descriptionInput.value = ''; 
     }
 });
 
-// Event listener for the search input field
-// Trigger searchTasks function when the user types in the search field
+// Event listener for the search input field. Triggers searchTasks function when the user types in the search field.
 searchBar.addEventListener('input', (event) => {
+    // Retrieves the value of the input element, trims any whitespace, and calls `searchTasks`.
     const target = event.target as HTMLInputElement;
     const searchTerm = target.value.trim();
     searchTasks(searchTerm);
 });
 
-
 /**
- * The function `addTaskToDOM` creates HTML elements for a task and appends them
- * to the DOM.
- * @param {Task} task - The parameter `task` is of type `Task`, which is a
- * custom class representing a task object. It contains properties
- * such as `title`, `description`, and `completed` that hold the relevant
- * information for a task.
+ * Creates and appends HTML elements for a task to the DOM.
+ * @param {Task} task - A `Task` object with properties like `title`, 
+ * `description`, and `completed`.
  */
 function addTaskToDOM(task: Task) {
-    // Create task container
+    // Creates task container.
     const taskElement = document.createElement('div');
     taskElement.classList.add('task');
     
-    // Create and append checkbox
+    // Creates and appends checkbox.
     const checkBox = document.createElement('input');
     checkBox.name = 'CheckBox'
     checkBox.type = 'checkbox';
     checkBox.classList.add('task-check');
-    checkBox.checked = task.completed; // Set checked status based on task completion
+    // Sets checked status based on task completion.
+    checkBox.checked = task.completed;
     taskElement.appendChild(checkBox);
 
-    // Create and append title label
+    // Creates and appends title label.
     const titleLabel = document.createElement('label');
     titleLabel.classList.add('task-label');
     titleLabel.textContent = 'Title';
-    titleLabel.htmlFor = 'title-' + task.id; // 'for' attribute
+    titleLabel.htmlFor = 'title-' + task.id;
     taskElement.appendChild(titleLabel);
 
-    // Create and append title content as input
+    // Creates and appends title input.
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
-    titleInput.id = 'title-' + task.id; // matching 'id' attribute
+    // Matches 'id' attribute for title.
+    titleInput.id = 'title-' + task.id;
     titleInput.classList.add('task-title');
     titleInput.value = task.title;
     if (task.completed) {
@@ -98,16 +117,18 @@ function addTaskToDOM(task: Task) {
     }
     taskElement.appendChild(titleInput);
 
-    // Create and append description label
+    // Creates and appends description label.
     const descriptionLabel = document.createElement('label');
     descriptionLabel.classList.add('task-label');
     descriptionLabel.textContent = 'Description';
-    descriptionLabel.htmlFor = 'description-' + task.id; // 'for' attribute
+    // Specifies 'for' attribute for label.
+    descriptionLabel.htmlFor = 'description-' + task.id;
     taskElement.appendChild(descriptionLabel);
 
-    // Create and append description content as textarea
+    // Creates and appends description textarea.
     const descriptionTextarea = document.createElement('textarea');
-    descriptionTextarea.id = 'description-' + task.id; // matching 'id' attribute
+    // Matches 'id' attribute for description.
+    descriptionTextarea.id = 'description-' + task.id;
     descriptionTextarea.classList.add('task-description');
     if (task.completed) {
         descriptionTextarea.classList.add('task-completed');
@@ -115,23 +136,20 @@ function addTaskToDOM(task: Task) {
     descriptionTextarea.textContent = task.description;
     taskElement.appendChild(descriptionTextarea);
 
-    // Create and append delete button
+    // Creates and appends delete button.
     const deleteButton = document.createElement('button');
     deleteButton.classList.add('task-delete');
     deleteButton.textContent = 'Delete';
     taskElement.appendChild(deleteButton);
 
-    // Append task element to the display container
+    // Appends task element to display container.
     tasksDisplay.appendChild(taskElement);
 
-    // Add event listeners to the new elements
+    // Adds event listeners to elements.
     addTaskEventListeners(taskElement, task);
 
-    /* The above code is calling the `saveTasks` function from the `taskManager`
-    object and passing the argument "addTaskToDOM". It then calls the
-    `showNotification` function with the argument 'Task Saved!'. */
+    // Saves tasks to local storage
     taskManager.saveTasks("addTaskToDOM");
-    showNotification('Task Saved!');
 }
 
 /**
@@ -140,28 +158,29 @@ function addTaskToDOM(task: Task) {
  * @param {Task} task - The task object associated with the element.
  */
 function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
-
+    // Select elements from the DOM within taskElement
     const checkButton = taskElement.querySelector('.task-check');
     const deleteButton = taskElement.querySelector('.task-delete');
     const titleElement = taskElement.querySelector('.task-title');
     const descriptionElement = taskElement.querySelector('.task-description');
 
-    // Check if checkButton is not null before adding event listener
+    // Add event listener for task completion toggle, log error if not found
     if (checkButton) {
         checkButton.addEventListener('click', () => toggleTaskCompletion(task, taskElement));
     } else {
         console.error('Check Button not found in task element');
     }
     
+    // Add event listener to delete button, log error if not found
     if (deleteButton) {
         deleteButton.addEventListener('click', () => deleteTask(task, taskElement));
     } else {
         console.error('Delete Button not found in task element');
     }
-
+    
+    // Add 'blur' event listener to title, log error if not found
     if (titleElement) {
         titleElement.addEventListener('blur', () => {
-            // Asserting titleElement as HTMLInputElement to access the value property
             const newTitle = (titleElement as HTMLInputElement).value;
             updateTaskTitle(task, newTitle);
         });
@@ -169,9 +188,9 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
         console.error('Title Element not found in task element');
     }
     
+    // Add 'blur' event listener to description, log error if not found
     if (descriptionElement) {
         descriptionElement.addEventListener('blur', () => {
-            // Asserting descriptionElement as HTMLTextAreaElement (if it's a textarea)
             const newDescription = (descriptionElement as HTMLTextAreaElement).value;
             updateTaskDescription(task, newDescription);
         });
@@ -186,29 +205,33 @@ function addTaskEventListeners(taskElement: HTMLElement, task: Task) {
  * @param {Element} taskElement - The DOM element of the task.
  */
 function toggleTaskCompletion(task: Task, taskElement: Element) {
-    // Toggle the task's completed status
+    // Toggle task's completion status
     task.checkTask(); 
 
-    // Find the checkbox element
+    // Find checkbox element and update its state
     const checkBox = taskElement.querySelector('.task-check') as HTMLInputElement;
-
-    // Update the checkbox state and the UI
     checkBox.checked = task.completed;
+
+    // Find title and description elements
     const titleElement = taskElement.querySelector('.task-title');
     const descriptionElement = taskElement.querySelector('.task-description');
-    if (titleElement){
+
+    // Toggle 'task-completed' class on title, log error if not found
+    if (titleElement) {
         titleElement.classList.toggle('task-completed', task.completed);
     } else {
         console.error("Title Element not found.")
     }
     
+    // Toggle 'task-completed' class on description, log error if not found
     if (descriptionElement) {
         descriptionElement.classList.toggle('task-completed', task.completed);
     } else {
         console.error("Description Element not found.")
     }
     
-    taskManager.saveTasks("toggleTaskCompletion"); // Save the updated tasks to local storage
+    // Save updated tasks to local storage and show notification
+    taskManager.saveTasks("toggleTaskCompletion"); 
     showNotification('Task Saved!');
 }
 
@@ -218,8 +241,11 @@ function toggleTaskCompletion(task: Task, taskElement: Element) {
  * @param {Element} taskElement - The DOM element of the task.
  */
 function deleteTask(task: Task, taskElement: Element) {
+    // Remove task and its DOM element
     taskManager.removeTask(task.id);
     taskElement.remove();
+
+    // Save tasks to local storage and show notification
     taskManager.saveTasks("deleteTask");
     showNotification('Task Saved!');
 }
@@ -230,10 +256,10 @@ function deleteTask(task: Task, taskElement: Element) {
  * @param {string} newTitle - The new title for the task.
  */
 function updateTaskTitle(task: Task, newTitle: string) {
-    task.updateTitle(newTitle); // Update title method in Task class
+    // Update task title and save changes
+    task.updateTitle(newTitle);
     taskManager.saveTasks("updateTaskTitle");
     showNotification('Task Saved!');
-    // Any additional logic...
 }
 
 /**
@@ -242,73 +268,80 @@ function updateTaskTitle(task: Task, newTitle: string) {
  * @param {string} newDescription - The new description for the task.
  */
 function updateTaskDescription(task: Task, newDescription: string) {
-    task.updateDescription(newDescription); // Update description method in Task class
+    // Update task description and save changes
+    task.updateDescription(newDescription);
     taskManager.saveTasks("updateTaskDescription");
     showNotification('Task Saved!');
-    // Any additional logic...
 }
-    
+
 /**
- * The function `searchTasks` filters and sorts tasks based on a search term,
- * prioritizing exact case matches in the title and description.
+ * Filters and sorts tasks based on a search term, giving priority to exact case matches in titles and descriptions.
  * @param {string} searchTerm - The term to search for in tasks.
  */
 function searchTasks(searchTerm: string) {
-    // Retrieve all tasks
+    // Notifies the user that the search is working.
+    showNotification('Searching...');
+
+    // Get all tasks from task manager
     const allTasks = taskManager.getTasks();
 
-    // Filter tasks based on search criteria with case priority
-    var filteredTasks = allTasks
+    // Initial filter for tasks that include the search term in title or description (case insensitive)
+    let filteredTasks = allTasks
         .filter(task => task.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                         task.description.toLowerCase().includes(searchTerm.toLowerCase()))
         .sort((taskA, taskB) => {
-            // Enhanced scoring function to prioritize search results
+            // Define a scoring system to prioritize search results
             const score = (task: Task) => {
                 let score = 0;
-                // Exact case match in title
+                // Higher score for exact case matches in title
                 if (task.title.includes(searchTerm)) score += 4;
-                // Case-insensitive match in title
+                // Score for case-insensitive matches in title
                 else if (task.title.toLowerCase().includes(searchTerm.toLowerCase())) score += 3;
 
-                // Exact case match in description
+                // Score for exact case matches in description
                 if (task.description.includes(searchTerm)) score += 2;
-                // Case-insensitive match in description
+                // Lower score for case-insensitive matches in description
                 else if (task.description.toLowerCase().includes(searchTerm.toLowerCase())) score += 1;
 
                 return score;
             };
-            return score(taskB) - score(taskA); // Sort in descending order of score
+            // Sort tasks by their score in descending order
+            return score(taskB) - score(taskA);
         });
 
-        // If no matches found, search for individual words in the search term
-        if (filteredTasks.length === 0) {
-            const searchWords = searchTerm.split(/\s+/); // Split search term into words
-            filteredTasks = allTasks
-                .filter(task => {
-                    // Check if any word in searchWords is in title or description
-                    return searchWords.some(word => 
-                        task.title.toLowerCase().includes(word.toLowerCase()) ||
-                        task.description.toLowerCase().includes(word.toLowerCase())
-                    );
-                })
-                .sort((taskA, taskB) => {
-                    // Scoring function for individual word matches
-                    const score = (task: Task) => {
-                        let score = 0;
-                        searchWords.forEach(word => {
-                            if (task.title.toLowerCase().includes(word.toLowerCase())) score += 1; // Lower score for title matches
-                            if (task.description.toLowerCase().includes(word.toLowerCase())) score += 0.5; // Even lower score for description matches
-                        });
-                        return score;
-                    };
-                    return score(taskB) - score(taskA); // Sort in descending order of score
-                });
-        }
+    // Fallback search when no matches are found: search individual words in the search term
+    if (filteredTasks.length === 0) {
+        // Split the search term into individual words
+        const searchWords = searchTerm.split(/\s+/);
+        filteredTasks = allTasks
+            .filter(task => {
+                // Check for matches of any word from searchWords in title or description
+                return searchWords.some(word => 
+                    task.title.toLowerCase().includes(word.toLowerCase()) ||
+                    task.description.toLowerCase().includes(word.toLowerCase())
+                );
+            })
+            .sort((taskA, taskB) => {
+                // Scoring function for matches based on individual words
+                const score = (task: Task) => {
+                    let score = 0;
+                    searchWords.forEach(word => {
+                        // Add to score for each word match in title
+                        if (task.title.toLowerCase().includes(word.toLowerCase())) score += 1;
+                        // Add to score for each word match in description, with lower weight
+                        if (task.description.toLowerCase().includes(word.toLowerCase())) score += 0.5;
+                    });
+                    return score;
+                };
+                // Sort tasks based on score from individual word matches
+                return score(taskB) - score(taskA); 
+            });
+    }
 
-    // Clear existing tasks from the display
+    // Remove current tasks from display before showing new results
     clearTasksDisplay();
 
-    // Add filtered tasks to the display
+    // Display filtered tasks on the UI
     filteredTasks.forEach(addTaskToDOM);
 }
 
@@ -316,48 +349,53 @@ function searchTasks(searchTerm: string) {
  * Clears all tasks from the task display area in the DOM.
  */
 function clearTasksDisplay() {
-    // Select the task display container and clear its content
+    // Selects the task display container and clears its content.
     tasksDisplay.innerHTML = '';
 }
 
 /**
- * Displays a notification message with a timed fade-out effect.
- * @param {string} message - The message to display.
- * @param {number} duration - Duration for the notification to show (default: 2000ms).
+ * Displays a temporary notification on the screen with a fade-out effect.
+ * @param {string} message - The message to display in the notification.
+ * @param {number} duration - The duration in milliseconds for which the notification will be visible (default: 2000ms).
  */
 function showNotification(message: string, duration: number = 2000) {
-    // Create and style the notification element
+    // Create a div element for the notification
     const notificationBox = document.createElement('div');
-    notificationBox.className = 'notification-box';
-    notificationBox.textContent = message;
+    notificationBox.className = 'notification-box';  // Assign CSS class for styling
+    notificationBox.textContent = message;  // Set the message text
 
-    // Add to the body
+    // Append the notification to the document body
     document.body.appendChild(notificationBox);
 
-    // Set a timeout to fade out the notification
+    // Set a timeout to start the fade-out animation slightly before the notification disappears
     setTimeout(() => {
-        notificationBox.style.animation = 'fadeOut 0.5s ease forwards';
-    }, duration - 500); // Start fade out 0.5s before hiding completely
+        notificationBox.style.animation = 'fadeOut 0.5s ease forwards'; // Apply fade-out CSS animation
+    }, duration - 500); // Animation starts 500ms before the notification is set to disappear
 
-    // Remove the notification after the specified duration
+    // Set another timeout to remove the notification element after the specified duration
     setTimeout(() => {
-        notificationBox.remove();
+        notificationBox.remove(); // Remove the notification from the DOM
     }, duration);
-
-    const lastSavedTimestamp = '2024-01-27 14:39:00'; // Update this manually with the current date and time
-
-    function appendLastSavedTimestamp() {
-        const footerElement = document.createElement('div');
-        footerElement.textContent = `Last updated: ${lastSavedTimestamp}`;
-        footerElement.style.textAlign = 'center';
-    
-        // Assuming you have a container element to append this information
-        const container = document.getElementById('timeStamp'); // Replace 'container' with your actual container element's ID
-        if (container) {
-            container.appendChild(footerElement);
-        }
-    }
-    
-    // Call the function to append the timestamp
-    appendLastSavedTimestamp();
 }
+
+/**
+ * Appends the last saved timestamp to a specified container in the HTML document.
+ * It creates a new div element displaying the timestamp and adds it to the container.
+ */
+function appendLastSavedTimestamp() {
+    // Create a new div element to display the last saved timestamp
+    const footerElement = document.createElement('div');
+    footerElement.textContent = `Last updated: ${lastSavedTimestamp}`; // Set the text content with the timestamp
+    footerElement.style.textAlign = 'center'; // Align the text to the center of the div
+
+    // Locate the container element by its ID
+    const container = document.getElementById('timeStamp');
+    if (container) {
+        container.appendChild(footerElement); // Append the footer element with timestamp to the container
+    } else {
+        console.error('Container element with id "timeStamp" not found.'); // Log an error if the container does not exist
+    }
+}
+
+// Calls the function to append the timestamp.
+appendLastSavedTimestamp();
