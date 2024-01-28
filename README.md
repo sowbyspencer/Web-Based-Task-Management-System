@@ -8,7 +8,8 @@ My goal in creating this software was to deepen my TypeScript skills. This proje
 
 Watch a brief demonstration and walkthrough of the code in my YouTube video. This demo highlights key learnings and insights gained about TypeScript syntax and its application in real-world scenarios.
 
-[Software Demo Video](http://youtube.link.goes.here)
+[Software Demo Video](https://youtu.be/a3_ps5-mlcw)
+[GitHub Page to try it out.](https://sowbyspencer.github.io/Web-Based-Task-Management-System/)
 
 # Development Environment
 
